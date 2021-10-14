@@ -16,7 +16,7 @@ class MCQsPlugin {
   }
 
   function adminAssets () {
-    wp_enqueue_script('ournewblocktype', plugin_dir_url(__FILE__) . 'test.js', array('wp-blocks'));
+    wp_enqueue_script('ournewblocktype', plugin_dir_url(__FILE__) . 'test.js', array('wp-blocks', 'wp-element'));
   }
 }
 
