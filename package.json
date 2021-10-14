@@ -1,0 +1,23 @@
+{
+  "name": "mcqs-plugin",
+  "version": "1.0.0",
+  "description": "A simple plugin for adding mcqs blocks to posts.",
+  "main": "test.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahsanwtc/mcqs-plugin.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ahsanwtc/mcqs-plugin/issues"
+  },
+  "homepage": "https://github.com/ahsanwtc/mcqs-plugin#readme",
+  "devDependencies": {
+    "@wordpress/scripts": "^18.1.0"
+  }
+}
