@@ -28,9 +28,17 @@ class MCQsPlugin {
   }
 
   function htmlRender ($attributes) {
+    // loads only when plugin is in currently rendered page
+    if (!is_admin()) {
+      wp_enqueue_script('mcqsFrontend', plugin_dir_url(__FILE__) . 'build/frontend.js', array('wp-element'));
+      wp_enqueue_style('mcqsFrontendStyles', plugin_dir_url(__FILE__) . 'build/frontend.css');
+    }
+
     ob_start(); 
     ?>
-      <h3>Today the sky is <?php echo $attributes['sky']; ?> and the grass is <?php echo $attributes['grass']; ?></h3>
+      <div class="paying-attention-update-me">
+
+      </div>
     <?php
     return ob_get_clean();
   }
