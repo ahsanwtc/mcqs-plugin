@@ -1,38 +1,89 @@
+import { TextControl, Flex, FlexBlock, FlexItem, Button, Icon } from '@wordpress/components';
+
+import './index.scss';
+
+(() => {
+  let locked = false;
+  
+  wp.data.subscribe(() => {
+    const blocks = wp.data.select('core/block-editor').getBlocks().filter(block =>
+      block.name === 'mcqs-plugin/mcqs' && block.attributes.correct === undefined
+    );
+    
+    if (blocks.length && locked === false) {
+      locked = true;
+      wp.data.dispatch('core/editor').lockPostSaving('noanswer');
+    }
+
+    if (!blocks.length && locked) {
+      locked = false;
+      wp.data.dispatch('core/editor').unlockPostSaving('noanswer');
+    }
+
+    console.log(blocks);
+
+  });
+
+})();
+
+const EditComponent = props => {
+  const { setAttributes, attributes: { question, answers, correct }} = props;
+
+  const handleAnswerOnChange = (answer, index) => {
+    const newAnswers = answers.concat([]);
+    newAnswers[index] = answer;
+    setAttributes({ answers: newAnswers });
+  };
+
+  const handleDeleteButtonOnClick = index => {
+    const newAnswers = answers.filter((_, i) => i !== index);
+    setAttributes({ answers: newAnswers });
+
+    if (index === correct) {
+      setAttributes({ correct: undefined });
+    }
+  };
+
+  const handleMarkButtonOnClick = index => setAttributes({ correct: index });
+  
+  const options = answers.map((answer, index) => {
+    return (
+      <Flex key={index}>
+        <FlexBlock>
+          <TextControl value={answer} onChange={ans => handleAnswerOnChange(ans, index)} autoFocus={answer === undefined} />
+        </FlexBlock>
+        <FlexItem>
+          <Button onClick={() => handleMarkButtonOnClick(index)}>
+            <Icon className="mark-as-correct" icon={correct === index ? 'star-filled' : 'star-empty'} />
+          </Button>
+        </FlexItem>
+        <FlexItem>
+          <Button isLink className="attention-delete" onClick={() => handleDeleteButtonOnClick(index)}>Delete</Button>
+        </FlexItem>
+      </Flex>
+    );
+  });
+
+  return (
+    <div className="mcqs-edit-block">
+      <TextControl label="Question:" style={{ fontSize: '20px' }} value={question} onChange={question => setAttributes({ question })} />
+      <p style={{ fontSize: '13px', margin: '20px 0 8px 0' }}>Answers:</p>
+      {options}
+      <Button isPrimary onClick={() => setAttributes({ answers: [...answers, undefined] })}>Add another answer</Button>
+    </div>
+  );
+
+};
+
 wp.blocks.registerBlockType('mcqs-plugin/mcqs', {
   title: 'MCQs',
   icon: 'smiley',
   category: 'common',
   attributes: {
-    sky: {
-      type: 'string',
-    },
-    grass: {
-      type: 'string',
-    }
+    question: { type: 'string' },
+    answers: { type: 'array', default: [''] },
+    correct: { type: 'number', default: undefined }
   },
-  edit: props => {
-    const { attributes: { sky, grass }} = props;
-
-    const updateSkyColor = e => {
-      props.setAttributes({ sky: e.target.value });
-    };
-
-    const updateGrassColor = e => {
-      props.setAttributes({ grass: e.target.value });
-    };
-
-    return (
-      <div>
-        <input type="text" placeholder="sky color" value={sky} onChange={updateSkyColor} />
-        <input type="text" placeholder="grass color" value={grass} onChange={updateGrassColor} />
-      </div>
-    );
-  },
-  save: props => {
-    const { attributes: { sky, grass }} = props;
-
-    return (
-      <p>Today sky is {sky} and the grass is {grass}.</p>
-    );
-  }
+  edit: EditComponent,
+  save: () => (null)
 });
