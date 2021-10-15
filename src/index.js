@@ -1,4 +1,6 @@
-import { TextControl, Flex, FlexBlock, FlexItem, Button, Icon } from '@wordpress/components';
+import { TextControl, Flex, FlexBlock, FlexItem, Button, Icon, PanelBody, PanelRow } from '@wordpress/components';
+import { InspectorControls } from '@wordpress/block-editor';
+import { ChromePicker } from 'react-color';
 
 import './index.scss';
 
@@ -27,7 +29,7 @@ import './index.scss';
 })();
 
 const EditComponent = props => {
-  const { setAttributes, attributes: { question, answers, correct }} = props;
+  const { setAttributes, attributes: { question, answers, correct, color }} = props;
 
   const handleAnswerOnChange = (answer, index) => {
     const newAnswers = answers.concat([]);
@@ -65,7 +67,14 @@ const EditComponent = props => {
   });
 
   return (
-    <div className="mcqs-edit-block">
+    <div className="mcqs-edit-block" style={{ backgroundColor: color }}>
+      <InspectorControls>
+        <PanelBody title="Background Color" initialOpen>
+          <PanelRow>
+            <ChromePicker color={color} onChangeComplete={c => setAttributes({ color: c.hex })} disableAlpha />
+          </PanelRow>
+        </PanelBody>
+      </InspectorControls>
       <TextControl label="Question:" style={{ fontSize: '20px' }} value={question} onChange={question => setAttributes({ question })} />
       <p style={{ fontSize: '13px', margin: '20px 0 8px 0' }}>Answers:</p>
       {options}
@@ -82,7 +91,8 @@ wp.blocks.registerBlockType('mcqs-plugin/mcqs', {
   attributes: {
     question: { type: 'string' },
     answers: { type: 'array', default: [''] },
-    correct: { type: 'number', default: undefined }
+    correct: { type: 'number', default: undefined },
+    color: { type: 'string', default: '#EBEBEB' }
   },
   edit: EditComponent,
   save: () => (null)
