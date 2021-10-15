@@ -98,6 +98,16 @@ wp.blocks.registerBlockType('mcqs-plugin/mcqs', {
     color: { type: 'string', default: '#EBEBEB' },
     alignment: { type: 'string', default: 'left' }
   },
+  description: 'A simple multiple choice questions plugin.',
+  example: {
+    attributes: {
+      question: 'What is my name?',
+      answers: ['Doggo', 'Mewmew', 'jsan'],
+      correct: 2,
+      alignment: 'left',
+      color: '#CFE8F1'
+    }
+  },
   edit: EditComponent,
   save: () => (null)
 });
