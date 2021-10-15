@@ -6,7 +6,7 @@ import "./frontend.scss";
 const divsToUpdate = document.querySelectorAll('.mcqs-div');
 
 const Quiz = props => {
-  const { question, answers, correct, color } = props;
+  const { question, answers, correct, color, alignment } = props;
   const [isCorrect, setIsCorrect] = useState(undefined);
   const [isCorrectDelayed, setIsCorrectDelayed] = useState(undefined);
 
@@ -34,7 +34,7 @@ const Quiz = props => {
   };
 
   return (
-    <div className="mcqs-frontend" style={{ backgroundColor: color }}>
+    <div className="mcqs-frontend" style={{ backgroundColor: color, textAlign: alignment }}>
       <p>{question}</p>
       <ul>
         {answers.map((answer, index) => {

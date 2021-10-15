@@ -1,5 +1,5 @@
 import { TextControl, Flex, FlexBlock, FlexItem, Button, Icon, PanelBody, PanelRow } from '@wordpress/components';
-import { InspectorControls } from '@wordpress/block-editor';
+import { InspectorControls, BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
 import { ChromePicker } from 'react-color';
 
 import './index.scss';
@@ -29,7 +29,7 @@ import './index.scss';
 })();
 
 const EditComponent = props => {
-  const { setAttributes, attributes: { question, answers, correct, color }} = props;
+  const { setAttributes, attributes: { question, answers, correct, color, alignment }} = props;
 
   const handleAnswerOnChange = (answer, index) => {
     const newAnswers = answers.concat([]);
@@ -68,6 +68,9 @@ const EditComponent = props => {
 
   return (
     <div className="mcqs-edit-block" style={{ backgroundColor: color }}>
+      <BlockControls>
+        <AlignmentToolbar value={alignment} onChange={a => setAttributes({ alignment: a })} />
+      </BlockControls>
       <InspectorControls>
         <PanelBody title="Background Color" initialOpen>
           <PanelRow>
@@ -92,7 +95,8 @@ wp.blocks.registerBlockType('mcqs-plugin/mcqs', {
     question: { type: 'string' },
     answers: { type: 'array', default: [''] },
     correct: { type: 'number', default: undefined },
-    color: { type: 'string', default: '#EBEBEB' }
+    color: { type: 'string', default: '#EBEBEB' },
+    alignment: { type: 'string', default: 'left' }
   },
   edit: EditComponent,
   save: () => (null)
