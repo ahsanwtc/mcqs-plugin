@@ -36,8 +36,8 @@ class MCQsPlugin {
 
     ob_start(); 
     ?>
-      <div class="paying-attention-update-me">
-
+      <div class="mcqs-div">
+        <pre style="display: none;"><?php echo wp_json_encode($attributes); ?></pre>
       </div>
     <?php
     return ob_get_clean();
