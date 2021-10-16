@@ -114,6 +114,10 @@ final class ElementorMCQs {
     wp_register_style('mcqs-style', PLUGIN_URL . 'build/index.css', [], rand(), 'all');    
     wp_register_script('mcqs-script', PLUGIN_URL . 'build/index.js', ['wp-blocks', 'wp-element', 'wp-editor'], rand());
 
+		/**
+		 * Product Card 
+		 */
+
     wp_enqueue_style('mcqs-style');
     wp_enqueue_script('mcqs-script');    
   }
@@ -178,6 +182,7 @@ final class ElementorMCQs {
    */
   public function init_widgets() {
     require_once PLUGIN_PATH . '/widgets/class-mcqs.php';
+		require_once PLUGIN_PATH . '/widgets/product-card.php';
   }
 
   /**
